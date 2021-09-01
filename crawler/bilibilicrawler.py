@@ -1,4 +1,5 @@
-from videorecord import VideoRecord, Comment
+from datatypes import VideoRecord
+from database import BilibiliDatabase
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,13 +7,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from typing import List
 from urllib.request import urlopen
+# import jsonpickle
 import json
 
 class BilibiliCrawler:
-    def __init__(self, start: str, end: str, max_page: str):
+    def __init__(self, start: str, end: str, /, pages: int, offset: int = 0):
         self.start_date = start
         self.end_date = end
-        self.max_page = max_page
+        self.pages = pages
+        self.offset = offset
 
     def _generate_url(self, page):
         suffix = self.start_date + "," + self.end_date
@@ -20,13 +23,13 @@ class BilibiliCrawler:
         f"?spm_id_from=333.5.b_746563685f6469676974616c.15#/all/click/0/{page}/" + suffix
         return url
 
-    def crawlIds(self) -> List:
+    def _crawlIds(self) -> List:
         """ Returns a list of video id and associated user id.
         """
 
         ids = []
         with webdriver.Chrome() as driver:
-            for page in range(1, self.max_page + 1):
+            for page in range(1 + self.offset, 1 + self.offset + self.pages):
                 url = self._generate_url(page)
                 driver.get(url)
                 
@@ -47,10 +50,12 @@ class BilibiliCrawler:
         
         return ids
 
-    def crawlVideoRecords(self, ids: List) -> VideoRecord:
+    def crawlVideoRecords(self) -> List[VideoRecord]:
         """ Returns video records associated with given
         urls.
         """
+
+        ids = self._crawlIds()
         records = []
         with webdriver.Chrome() as driver:
             for id in ids:
@@ -64,6 +69,7 @@ class BilibiliCrawler:
                 soup = BeautifulSoup(driver.page_source, "lxml")
 
                 # Metadata
+                record.id = id[0]
                 record.url = video_url
                 record.author_id = id[1]
                 record.title = soup.find("span", {"class": "tit"}).contents[0].strip()
@@ -95,20 +101,39 @@ class BilibiliCrawler:
                 comments = []
                 comment_sections = soup.find_all("div", {"class": "list-item reply-wrap"}, limit=5)
                 for section in comment_sections:
-                    comment = Comment()
-                    comment.user_name = section.find("a", {"class": "name"}).text
-                    comment.text = section.find("p", {"class": "text"}).text
-
-                    user_id = section.find("a", {"class": "name"})['href'][21:]
-                    with urlopen("https://api.bilibili.com/x/space/acc/info?mid="\
-                         + user_id) as response:
-                         response = json.load(response)
-                         comment.avatar_url = response['data']['face']
-
+                    comment = section.find("p", {"class": "text"}).text
                     comments.append(comment)
-                
-                record.comments = comments
 
-craler = BilibiliCrawler("2021-08-01", "2021-08-31", 1)
-urls = craler.crawlIds()
-craler.crawlVideoRecords(urls)
+                record.comments = comments
+                records.append(record)
+        
+        return records
+
+config_file_path = "crawler/crawler_config.json"
+config = json.loads(open(config_file_path, "r").read())
+
+page_stride = config["stride"]
+page_offset = config["current_offset"]
+max_pages = config["max_pages"]
+
+craler = BilibiliCrawler("2021-08-01", "2021-08-31", pages=page_stride, offset=page_offset)
+
+db = BilibiliDatabase()
+
+for offset in range(page_offset, max_pages - page_stride, page_stride):
+    craler.offset = page_offset
+    records = craler.crawlVideoRecords()
+    db.insert_video_records(records)
+    page_offset += page_stride
+    
+    json_data = json.dumps({"stride": page_stride,
+                            "max_pages": max_pages,
+                            "current_offset": page_offset})
+
+    config_file = open(config_file_path, "w")
+    config_file.write(json_data)
+    config_file.close()
+    print(f"Current offset: {page_offset}")
+
+
+# print(len(db.select_video_records(0, 10000)))

@@ -1,16 +1,9 @@
 from typing import List
-
-class Comment:
-    def __init__(self):
-        self.user_name = ""
-        self.avatar_url = ""
-        self.text = ""
-    
-    def __str__(self):
-        return f"user: {self.user_name}, avatar: {self.avatar_url}, text: {self.text}"
+import json
 
 class VideoRecord:
     def __init__(self):
+        self.id = ""
         self.title = ""
         self.description = ""
         self.url = ""
@@ -38,3 +31,13 @@ stars: {self.stars}
 author: {self.author_id}
 comments: {[comment.__str__() for comment in self.comments]}
 """
+
+class User:
+    def __init__(self):
+        self.id = ""
+        self.name = ""
+        self.bio = ""
+        self.avatar_url = ""
+        self.fan_num = ""
+        self.subscription_num = ""
+        self.videos = []
