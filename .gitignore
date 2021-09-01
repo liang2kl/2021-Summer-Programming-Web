@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 .DS_Store
-craler_config.json
+crawler/crawler_config.json
