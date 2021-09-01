@@ -5,9 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 from typing import List
 from urllib.request import urlopen
-# import jsonpickle
 import json
 
 class BilibiliCrawler:
@@ -20,7 +20,7 @@ class BilibiliCrawler:
     def _generate_url(self, page):
         suffix = self.start_date + "," + self.end_date
         url = "https://www.bilibili.com/v/tech/digital/" \
-        f"?spm_id_from=333.5.b_746563685f6469676974616c.15#/all/click/0/{page}/" + suffix
+        f"?spm_id_from=333.6.b_7375626e6176.2#/all/click/0/{page}/" + suffix
         return url
 
     def _crawlIds(self) -> List:
@@ -28,25 +28,25 @@ class BilibiliCrawler:
         """
 
         ids = []
-        with webdriver.Chrome() as driver:
+        with webdriver.Firefox() as driver:
             for page in range(1 + self.offset, 1 + self.offset + self.pages):
                 url = self._generate_url(page)
                 driver.get(url)
                 
                 try:
                     # Wait until the items are loaded
-                    WebDriverWait(driver, 20, 0.5).until(
+                    WebDriverWait(driver, 10, 0.5, ignored_exceptions=(TimeoutException)).until(
                         EC.presence_of_all_elements_located((By.CLASS_NAME, "l-item")))
+                    
                     soup = BeautifulSoup(driver.page_source, "lxml")
                     items = soup.find_all("div", {"class": "l-item"})
-
+                    
                     for item in items:
                         video_id = item.find("a")["href"][25:]
                         user_id = item.find("a", {"class": "v-author"})["href"][22:]
                         ids.append((video_id, user_id))
-
-                finally:
-                    continue
+                except TimeoutException:
+                    pass
         
         return ids
 
@@ -57,56 +57,63 @@ class BilibiliCrawler:
 
         ids = self._crawlIds()
         records = []
-        with webdriver.Chrome() as driver:
+        with webdriver.Firefox() as driver:
             for id in ids:
                 record = VideoRecord()
 
                 video_url = "https://www.bilibili.com/video/" + id[0]
                 driver.get(video_url)
-                WebDriverWait(driver, 20, 0.5).until(
-                    EC.presence_of_all_elements_located((By.CLASS_NAME, "reply-wrap")))
+                
+                driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
 
-                soup = BeautifulSoup(driver.page_source, "lxml")
+                try:
+                    WebDriverWait(driver, 20, 0.5).until(
+                        EC.presence_of_all_elements_located((By.CLASS_NAME, "reply-wrap")))
 
-                # Metadata
-                record.id = id[0]
-                record.url = video_url
-                record.author_id = id[1]
-                record.title = soup.find("span", {"class": "tit"}).contents[0].strip()
+                    soup = BeautifulSoup(driver.page_source, "lxml")
 
-                description_section = soup.find("div", {"class": "desc-info"})
-                if description_section.contents and \
-                    description_section.contents[0]:
+                    # Metadata
+                    record.id = id[0]
+                    record.url = video_url
+                    record.author_id = id[1]
+                    record.title = soup.find("span", {"class": "tit"}).contents[0].strip()
 
-                    record.description = description_section.contents[0].text.strip()
+                    description_section = soup.find("div", {"class": "desc-info"})
+                    if description_section.contents and \
+                        description_section.contents[0]:
 
-                apiUrl = "https://api.bilibili.com/x/web-interface/view?bvid=" + \
-                    id[0]
-                response = urlopen(apiUrl)
-                response_json = json.load(response)
-                record.cover_url = response_json["data"]["pic"]
+                        record.description = description_section.contents[0].text.strip()
 
-                # Stats data
-                data_content = soup.find("div", {"class": "video-data"}).contents
-                record.plays = data_content[0].text[:-5]
-                record.shoots = data_content[1].text[:-2]
-                record.time = data_content[2].text.strip()
+                    apiUrl = "https://api.bilibili.com/x/web-interface/view?bvid=" + \
+                        id[0]
+                    response = urlopen(apiUrl)
+                    response_json = json.load(response)
+                    record.cover_url = response_json["data"]["pic"]
 
-                # Other stats
-                record.likes = soup.find("span", {"class": "like"}).text.strip()
-                record.coins = soup.find("span", {"class": "coin"}).text.strip()
-                record.stars = soup.find("span", {"class": "collect"}).text.strip()
+                    # Stats data
+                    data_content = soup.find("div", {"class": "video-data"}).contents
+                    record.plays = data_content[0].text[:-5]
+                    record.shoots = data_content[1].text[:-2]
+                    record.time = data_content[2].text.strip()
 
-                ## Comments
-                comments = []
-                comment_sections = soup.find_all("div", {"class": "list-item reply-wrap"}, limit=5)
-                for section in comment_sections:
-                    comment = section.find("p", {"class": "text"}).text
-                    comments.append(comment)
+                    # Other stats
+                    record.likes = soup.find("span", {"class": "like"}).text.strip()
+                    record.coins = soup.find("span", {"class": "coin"}).text.strip()
+                    record.stars = soup.find("span", {"class": "collect"}).text.strip()
 
-                record.comments = comments
-                records.append(record)
-        
+                    ## Comments
+                    comments = []
+                    comment_sections = soup.find_all("div", {"class": "list-item reply-wrap"}, limit=5)
+                    for section in comment_sections:
+                        comment = section.find("p", {"class": "text"}).text
+                        comments.append(comment)
+
+                    record.comments = comments
+                    records.append(record)
+                
+                except TimeoutException:
+                    pass
+
         return records
 
 config_file_path = "crawler/crawler_config.json"
@@ -133,7 +140,9 @@ for offset in range(page_offset, max_pages - page_stride, page_stride):
     config_file = open(config_file_path, "w")
     config_file.write(json_data)
     config_file.close()
-    print(f"Current offset: {page_offset}")
+
+    db.cursor.execute(r"SELECT COUNT(1) FROM video")
+    print(f"Current offset: {page_offset}, total records: {db.cursor.fetchall()}")
 
 
 # print(len(db.select_video_records(0, 10000)))
