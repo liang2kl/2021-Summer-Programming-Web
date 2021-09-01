@@ -126,3 +126,4 @@ dmypy.json
 .pyre/
 
 .DS_Store
+crawler/crawler_config.json
