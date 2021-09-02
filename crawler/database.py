@@ -48,7 +48,7 @@ class BilibiliDatabase:
             , ?, ?, ?, ? )
         """
         for record in records:
-            comments = json.dumps(record.comments)
+            comments = json.dumps(record.comments, ensure_ascii=False)
             self.cursor\
                 .execute(cmd, (record.id, record.title,
                          record.description, record.url, record.cover_url,
