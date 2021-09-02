@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getVideo } from "./API";
-import { Card, Space, Statistic, Row, Col, Comment, Avatar } from "antd";
+import { Card, Space, Statistic, Row, Col, Comment, Avatar, Divider } from "antd";
 import { PlaySquareTwoTone, BuildTwoTone, LikeTwoTone, DollarCircleTwoTone } from "@ant-design/icons";
 
 import WebContent from "./WebContent";
@@ -23,12 +23,15 @@ function VideoPage() {
   return <>
     <WebContent
       title={video ? video.title : "加载中"}
-      subTitle={id}
+      subTitle={video ? video.time : id}
     >
-      <Space direction="vertical" size={24} style={{ 
-        width: "100%", marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}>
-        <Row gutter={24}>
-          <Col span={18}>
+      <Row gutter={24} style={{
+        width: "100%", marginTop: "20px", marginRight: "20px", marginLeft: "20px"
+      }}>
+
+        <Col span={18}>
+          <Space direction="vertical" size={24}>
+
             <iframe
               className="video-player fade-slide-animated"
               border="0"
@@ -38,30 +41,7 @@ function VideoPage() {
               src={"https://player.bilibili.com/player.html?bvid=" + id}
               style={{ width: "100%", aspectRatio: "1.7", backgroundColor: "#fff" }}
             />
-          </Col>
-          <Col span={6} >
-            <Card
-              className="fade-slide-animated"
-              title="视频信息"
-              loading={video == null}
-              style={{ animationDelay: "0.1s" }}
-            >
-              {video && <Space direction="vertical" size={16}>
-                {StatisticRow("播放量", video.plays,
-                  <PlaySquareTwoTone />, 2)}
-                {StatisticRow("点赞数", video.stars,
-                  <LikeTwoTone />, 3)}
-                {StatisticRow("弹幕数", video.shoots,
-                  <BuildTwoTone />, 4)}
-                {StatisticRow("投币数", video.coins,
-                  <DollarCircleTwoTone />, 4)}
-              </Space>
-              }
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={24}>
-          <Col span={18}>
+
             <Card
               className="fade-slide-animated"
               title="评论"
@@ -70,9 +50,35 @@ function VideoPage() {
             >
               {video && CommentView()}
             </Card>
-          </Col>
-        </Row>
-      </Space>
+          </Space>
+
+        </Col>
+        <Col span={6} >
+          <Card
+            className="fade-slide-animated"
+            title="视频信息"
+            loading={video == null}
+            style={{ animationDelay: "0.1s" }}
+          >
+            {video && <Space direction="vertical" size={18} style={{ width: "100%" }} >
+              {StatisticRow("播放量", video.plays,
+                <PlaySquareTwoTone />, 2)}
+              {StatisticRow("点赞数", video.stars,
+                <LikeTwoTone />, 3)}
+              {StatisticRow("弹幕数", video.shoots,
+                <BuildTwoTone />, 4)}
+              {StatisticRow("投币数", video.coins,
+                <DollarCircleTwoTone />, 4)}
+              {video.description.length > 4 && <div style={{ marginTop: "15px" }}>
+                <strong>简介</strong>
+                <div style={{ color: "gray" }}>{video.description}</div>
+              </div>}
+
+            </Space>
+            }
+          </Card>
+        </Col>
+      </Row>
     </WebContent>
   </>
 
@@ -97,7 +103,7 @@ function VideoPage() {
         author={names[index % 5]}
         avatar={<Avatar style={{ backgroundColor: colors[index % 5] }} />}
         content={comment}
-        style={{animationDelay: (index * 0.1).toString() + "s"}}
+        style={{ animationDelay: (index * 0.1).toString() + "s" }}
       />
     )
   }
