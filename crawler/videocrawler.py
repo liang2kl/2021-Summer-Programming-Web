@@ -10,7 +10,7 @@ from typing import List
 from urllib.request import urlopen
 import json
 
-class BilibiliCrawler:
+class VideoCrawler:
     def __init__(self, start: str, end: str, /, pages: int, offset: int = 0):
         self.start_date = start
         self.end_date = end
@@ -116,6 +116,7 @@ class BilibiliCrawler:
 
         return records
 
+# Create config file before crawing
 config_file_path = "crawler/crawler_config.json"
 config = json.loads(open(config_file_path, "r").read())
 
@@ -123,7 +124,7 @@ page_stride = config["stride"]
 page_offset = config["current_offset"]
 max_pages = config["max_pages"]
 
-craler = BilibiliCrawler("2021-08-01", "2021-08-31", pages=page_stride, offset=page_offset)
+craler = VideoCrawler("2021-08-01", "2021-08-31", pages=page_stride, offset=page_offset)
 
 db = BilibiliDatabase()
 
@@ -140,9 +141,5 @@ for offset in range(page_offset, max_pages - page_stride, page_stride):
     config_file = open(config_file_path, "w")
     config_file.write(json_data)
     config_file.close()
-
-    db.cursor.execute(r"SELECT COUNT(1) FROM video")
-    print(f"Current offset: {page_offset}, total records: {db.cursor.fetchall()}")
-
 
 # print(len(db.select_video_records(0, 10000)))

@@ -127,4 +127,5 @@ dmypy.json
 
 .DS_Store
 crawler/crawler_config.json
+crawler/user_crawler_config.txt
 .vscode
