@@ -2,7 +2,7 @@ import IndexPage from './IndexPage';
 import VideoListPage from './VideoListPage';
 import VideoPage from './VideoPage';
 import axios from "axios"
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import { getVideoCount, getUserCount } from "./API"
 
@@ -22,8 +22,9 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact render={() => <IndexPage users={userCount} videos={videoCount}/>} />
-        <Route path="/videos" component={() => <VideoListPage videos={videoCount}/>} />
+        <Route path="/videos/:page" component={() => <VideoListPage videos={videoCount}/>} />
         <Route path="/video/:id" component={() => <VideoPage />} />
+        <Route path="/videos" component={() => <Redirect to="/videos/1"/>}/>
       </Switch>
     </BrowserRouter>
 

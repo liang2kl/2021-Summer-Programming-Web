@@ -10,15 +10,16 @@ function WebContent(props) {
 
     return <Layout >
         <Content className="content-container">
+            <div style={{ height: "60px"}}/>
+            <div className="inseted-content">
+                {props.children}
+            </div>
             <PageHeader
                 onBack={() => { history.goBack() }}
                 title={props.title}
                 subTitle={props.subTitle}
                 className="header"
             />
-            <div className="inseted-content">
-                {props.children}
-            </div>
         </Content>
         <Footer className="footer">©2021 Liang Yesheng</Footer>
     </Layout>

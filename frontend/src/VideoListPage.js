@@ -1,6 +1,6 @@
 import { getVideos } from "./API";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Col, Row, Card, Space, Image, Pagination, Layout } from "antd";
 
 import WebContent from "./WebContent";
@@ -9,9 +9,9 @@ import "./VideoListPage.css"
 const { Footer } = Layout;
 
 function VideoListPage(props) {
-
+  const { page } = useParams()
+  const history = useHistory()
   const [videos, setVideos] = useState([])
-  const [page, setPage] = useState(1)
   const [size, setSize] = useState(40)
   const cols = 4
   const rows = parseInt(videos.length / cols) + ((videos.length % cols) != 0 ? 1 : 0)
@@ -19,11 +19,13 @@ function VideoListPage(props) {
   const totalRecords = props.videos
 
   useEffect(() => {
+    console.log("Init")
     getVideos(page, size, videos => {
+      console.log("Set")
       setVideos(videos)
       window.scrollTo({ top: 0 })
     })
-  }, [])
+  }, [page, size])
 
   return <WebContent title="所有视频" subTitle={"第 " + page.toString() + " 页"}>
       {videos.length > 0 && listContent()}
@@ -33,12 +35,9 @@ function VideoListPage(props) {
         <Pagination
           showSizeChanger
           onChange={(page, size) => {
-            setPage(page)
+            console.log("Setting", page)
             setSize(size)
-            getVideos(page, size, videos => {
-              setVideos(videos)
-              window.scrollTo({ top: 0 })
-            })
+            history.push("/videos/" + page.toString())
           }}
           defaultCurrent={page}
           total={totalRecords}
