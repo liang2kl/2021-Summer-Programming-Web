@@ -55,7 +55,7 @@ def get_video(request: HttpRequest):
         return create_error_response(-1, "Invalid parameter 'id'")
     
     try: 
-        video = Video.objects.filter(id__iexact=q_id).values().first()
+        video = Video.objects.filter(id=q_id).values().first()
         if video:
             video["comments"] = json.loads(video["comments"])
             return create_success_response(video)

@@ -1,26 +1,24 @@
-.site-statistic-demo-card {
-  padding: 30px;
-  background: #ececec;
-}
-
 .layout {
     min-height: 100vh;
 }
 
-.center-content {
-    min-height: 80vh;
+.content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: auto;
-    margin-bottom: auto;
-    /* animation: 2s title-fade; */
-    /* animation-name: title-fade; */
-    /* animation: title-fade 2 ease-in-out 0.2; */
+}
+
+.center-content {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    /* max-height: 60vh; */
+    /* min-height: 85vh; */
 }
 
 .card {
+    user-select: none;
     opacity: 0;
     min-width: 300px;
     /* box-shadow: ; */
@@ -38,35 +36,37 @@
 }
 
 .title {
+    letter-spacing: 0.1em;
     -webkit-animation: 2s title-fade 0s;
     animation: 2s title-fade 0s;
     font-family: 'monaco';
-    margin-bottom: 50px;
+    margin: 20px 0 100px 0;
+    text-align: center;
     font-size: calc(15px + 2vmin);
+    user-select: none;
 }
 
 @keyframes title-fade {
     from {
+        transform: translateY(-30px);
         opacity: 0;
     }
     to {
+        transform: translateY(0);
         opacity: 1;
     }
 }
 
-.footer {
-    text-align: center;
-    font-family: "monaco";
+@keyframes footer-fade {
+    from { opacity: 0;}
+    to { opacity: 1; }
 }
 
-#components-layout-demo-top .logo {
-  float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
-}
-.ant-row-rtl #components-layout-demo-top .logo {
-  float: right;
-  margin: 16px 0 16px 24px;
+.footer {
+    opacity: 0;
+    user-select: none;
+    text-align: center;
+    font-family: "monaco";
+    -webkit-animation: 1.5s footer-fade 2s forwards;
+    animation: 1.5s footer-fade 1s forwards;
 }

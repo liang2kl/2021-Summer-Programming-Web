@@ -80,7 +80,5 @@ class BilibiliDatabase:
             records.append(record)
         
         return records
-        
-
 
 

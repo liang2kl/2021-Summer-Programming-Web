@@ -31,4 +31,9 @@ function getUsers(page, count, handler) {
     get("/list", { "page": page, "count": count, "type": "u" }, handler)
 }
 
-export { getVideoCount, getUserCount, getVideos, getUsers }
+function getVideo(id, handler) {
+    get("/video", {"id": id}, handler)
+}
+
+export { getVideoCount, getUserCount, 
+    getVideos, getUsers, getVideo }

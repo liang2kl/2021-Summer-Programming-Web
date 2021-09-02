@@ -1,0 +1,15 @@
+.fade-slide-animated {
+    opacity: 0;
+    animation: fade-slide 0.7s ease-in-out forwards;
+}   
+
+@keyframes fade-slide {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

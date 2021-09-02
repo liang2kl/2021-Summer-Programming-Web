@@ -1,0 +1,50 @@
+.empty-content {
+    min-height: 500;
+}
+
+.video-list-container {
+    user-select: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 24px;
+    margin-right: 24px;
+}
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}
+
+.card-header {
+    line-height: 20px; 
+    max-height: 40px;     
+}
+
+.card-description {
+    line-height: 18px; 
+    max-height: 36px;
+    color: gray;
+}
+
+.c {
+    opacity: 0;
+    animation-name: fade-slide;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-slide {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

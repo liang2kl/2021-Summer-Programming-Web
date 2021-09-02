@@ -1,27 +1,18 @@
-import { getVideoCount, getUserCount } from "./API"
-import { useState, useEffect } from "react"
-import { Statistic, Row, Col, Card, Layout, Menu, Breadcrumb } from 'antd';
-import { UsergroupAddOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom'
+
+import { Statistic, Row, Col, Card, Layout } from 'antd';
+import { FundFilled, PlaySquareFilled } from '@ant-design/icons';
 import "./IndexPage.css"
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
-function IndexPage() {
-  const [videoCount, setVideoCount] = useState(null)
-  const [userCount, setUserCount] = useState(null)
+function IndexPage(props) {
 
-  useEffect(() => {
-    getVideoCount(count => setVideoCount(count))
-    getUserCount(count => setUserCount(count))
-  }, [])
+  const videoCount = props.videos
+  const userCount = props.users
 
   return <Layout className = "layout">
-    <Content style={{ padding: '0 50px' }}>
-      {/* <Breadcrumb style={{ margin: '16px 0' }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
-      </Breadcrumb> */}
+    <Content style={{ padding: '0 50px' }} className="content">
       {content()}
     </Content>
     <Footer className="footer">©2021 Liang Yesheng</Footer>
@@ -33,14 +24,17 @@ function IndexPage() {
       <div className="title">Hello, World!</div>
       <Row gutter={16}>
         <Col span={12}>
-          <Card className="card video-card" hoverable="true">
-            <Statistic
-              title="总视频数"
-              value={videoCount}
-              prefix={<VideoCameraOutlined />}
-              loading={videoCount == null}
-            />
-          </Card>
+          <Link to="/videos">
+            <Card className="card video-card" hoverable="true">
+              <Statistic
+                title="总视频数"
+                value={videoCount}
+                prefix={<PlaySquareFilled />}
+                loading={videoCount == null}
+                valueStyle={{ fontFamily: "monaco" }}
+              />
+            </Card>
+          </Link>
         </Col>
         <Col span={12}>
           <Card className="card user-card" hoverable="true">
@@ -48,11 +42,14 @@ function IndexPage() {
               title="总用户数"
               value={userCount}
               loading={userCount == null}
-              prefix={<UsergroupAddOutlined />}
+              prefix={<FundFilled />}
+              valueStyle={{ fontFamily: "monaco" }}
             />
           </Card>
         </Col>
-      </Row>  </div>
+      </Row>
+
+      </div>
   }
 }
 
