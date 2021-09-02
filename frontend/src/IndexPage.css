@@ -1,0 +1,72 @@
+.site-statistic-demo-card {
+  padding: 30px;
+  background: #ececec;
+}
+
+.layout {
+    min-height: 100vh;
+}
+
+.center-content {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    /* animation: 2s title-fade; */
+    /* animation-name: title-fade; */
+    /* animation: title-fade 2 ease-in-out 0.2; */
+}
+
+.card {
+    opacity: 0;
+    min-width: 300px;
+    /* box-shadow: ; */
+}
+
+.video-card {
+    color: red;
+    -webkit-animation: 1.5s title-fade 0.5s forwards;
+    animation: 1.5s title-fade 0.5s forwards;
+}
+
+.user-card {
+    -webkit-animation: 1.3s title-fade 0.7s forwards;
+    animation: 1.3s title-fade 0.7s forwards;
+}
+
+.title {
+    -webkit-animation: 2s title-fade 0s;
+    animation: 2s title-fade 0s;
+    font-family: 'monaco';
+    margin-bottom: 50px;
+    font-size: calc(15px + 2vmin);
+}
+
+@keyframes title-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.footer {
+    text-align: center;
+    font-family: "monaco";
+}
+
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
