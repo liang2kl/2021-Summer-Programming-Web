@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.http.request import HttpRequest
+from django.http.response import HttpResponse
 from .models import Video, User
 from typing import List
 import json
+import time
 
 # List
 def get_list(request: HttpRequest):
@@ -56,7 +58,6 @@ def query_videos(author_id: str, page: int, count: int) -> str:
 
     for video in query:
         video["comments"] = json.loads(video["comments"])
-        print(video["author_id"])
 
     return query
 
@@ -115,6 +116,35 @@ def get_stats(request: HttpRequest):
     else:
         return create_error_response(-1, "Invalid 'type' parameter")
 
+# Search
+def search(request: HttpRequest):
+    q_type = request.GET.get("type", None)
+    keyword = request.GET.get("q", None)
+
+    if not keyword:
+        return create_error_response(-1, "Missing parameter 'q'")
+
+    object = None
+    start_time = time.time_ns()
+    if q_type == "v":
+        object = get_search_videos(keyword)
+    elif q_type == "u":
+        object = get_search_users(keyword)
+    else:
+        return create_error_response(-1, "Missin parameter 'type'")
+    
+    end_time = time.time_ns()
+    interval = (end_time - start_time) / (10 ** 9)
+
+    return create_search_response(object, interval)
+
+def get_search_videos(keyword: str):
+    query = list(Video.objects.filter(title__icontains=keyword).values())
+    return query
+
+def get_search_users(keyword: str):
+    query = list(User.objects.filter(name__icontains=keyword).values())
+    return query
 
 # Create response
 def create_error_response(code: int, msg: str) -> JsonResponse:
@@ -123,4 +153,9 @@ def create_error_response(code: int, msg: str) -> JsonResponse:
 
 def create_success_response(obj):
     return JsonResponse({"code": 0, "data": obj}, safe=False,
+                        json_dumps_params={"ensure_ascii": False})
+
+
+def create_search_response(obj, interval):
+    return JsonResponse({"code": 0, "data": obj, "interval": interval}, safe=False,
                         json_dumps_params={"ensure_ascii": False})
