@@ -1,7 +1,9 @@
-import IndexPage from './IndexPage';
-import VideoListPage from './VideoListPage';
-import UserListPage from './UserListPage';
-import VideoPage from './VideoPage';
+import IndexPage from './pages/IndexPage';
+import VideoListPage from './pages/VideoListPage';
+import UserListPage from './pages/UserListPage';
+import VideoPage from './pages/VideoPage';
+import UserPage from './pages/UserPage';
+import SearchPage from './pages/SearchPage';
 import axios from "axios"
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useState, useEffect } from 'react';
@@ -26,8 +28,10 @@ function App() {
         <Route path="/videos/:page" component={() => <VideoListPage videoNum={videoCount}/>} />
         <Route path="/users/:page" component={() => <UserListPage userNum={userCount} />} />
         <Route path="/video/:id" component={() => <VideoPage />} />
+        <Route path="/user/:id" component={() => <UserPage />} />
         <Route path="/videos" component={() => <Redirect to="/videos/1"/>}/>
         <Route path="/users" component={() => <Redirect to="/users/1" />} />
+        <Route path="/search" component={() => <SearchPage />} />
       </Switch>
     </BrowserRouter>
 

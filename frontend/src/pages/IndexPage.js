@@ -1,17 +1,23 @@
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
-import { Statistic, Row, Col, Card, Layout } from 'antd';
+import { Statistic, Row, Col, Card, Layout, PageHeader, Button } from 'antd';
 import { FundFilled, PlaySquareFilled } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import "./IndexPage.css"
 
 const { Content, Footer } = Layout;
 
 function IndexPage(props) {
-
+  const history = useHistory()
   const videoCount = props.videoNum
   const userCount = props.userNum
 
-  return <Layout className = "layout">
+  return <Layout className="layout">
+    <PageHeader title="Bilibili Crawler" extra={[
+      <Button shape="circle" icon={<SearchOutlined />} onClick={() => {
+        history.push("/search")
+      }}/>
+    ]} className="header-title"/>
     <Content style={{ padding: '0 50px' }} className="content">
       {content()}
     </Content>

@@ -1,4 +1,4 @@
-import { getUser } from "./API";
+import { getUser } from "../API";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, Avatar, Col, Row, Space } from "antd";

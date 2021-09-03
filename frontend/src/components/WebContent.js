@@ -1,4 +1,4 @@
-import { Layout, PageHeader } from "antd";
+import { Layout, PageHeader, Avatar } from "antd";
 import { useHistory } from "react-router-dom";
 
 import "./WebContent.css"
@@ -15,7 +15,7 @@ function WebContent(props) {
       <div className="inseted-content" >
         {props.children}
       </div>
-      <PageHeader
+      {props.avatar && <PageHeader
         onBack={() => {
           if (props.toRoot) {
             history.replace("/")
@@ -26,12 +26,23 @@ function WebContent(props) {
         title={props.title}
         subTitle={props.subTitle}
         className="header"
-      />
+        avatar={{src: props.avatar}}
+      />}
+      {!props.avatar && <PageHeader
+        onBack={() => {
+          if (props.toRoot) {
+            history.replace("/")
+          } else {
+            history.goBack()
+          }
+        }}
+        title={props.title}
+        subTitle={props.subTitle}
+        className="header"
+      />}
     </Content>
     <Footer className="footer">©2021 Liang Yesheng</Footer>
   </Layout>
-
-
 }
 
 export default WebContent

@@ -1,11 +1,11 @@
 import { Link, useParams, useHistory } from "react-router-dom";
-import { getUsers } from "./API";
+import { getUsers } from "../API";
 import { useEffect, useState } from "react";
 import { Pagination, Layout } from "antd";
 
-import WebContent from "./WebContent";
-import GridContent from "./GridContent";
-import UserCard from "./UserCard";
+import WebContent from "../components/WebContent";
+import GridContent from "../components/GridContent";
+import UserListContent from "../components/UserListContent";
 
 const { Footer } = Layout;
 
@@ -30,16 +30,7 @@ function UserListPage(props) {
 
 
   return <WebContent title="所有用户" subTitle={"第 " + init_page.toString() + " 页"} toRoot={true}>
-    {users.length > 0 &&
-      <GridContent
-        total={users.length}
-        cols={cols}
-        content={(index) => <Link to={"/user/" + users[index].id}>
-          <UserCard user={users[index]} className="c" style={{ animationDelay: ((index) * 0.03).toString() + "s" }} hoverable/>
-        </Link>}
-        itemId={(index) => users[index].id}        
-      />
-    }
+    {users.length > 0 && <UserListContent users={users} cols={4} /> }
     {users.length === 0 && <div style={{ minHeight: "1000px" }} />}
 
     <Footer align="center">

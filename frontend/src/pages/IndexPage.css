@@ -1,5 +1,6 @@
 .layout {
     min-height: 100vh;
+    user-select: none;
 }
 
 .content {
@@ -18,7 +19,6 @@
 }
 
 .card {
-    user-select: none;
     opacity: 0;
     min-width: 300px;
     /* box-shadow: ; */
@@ -40,10 +40,18 @@
     -webkit-animation: 2s title-fade 0s;
     animation: 2s title-fade 0s;
     font-family: 'monaco';
-    margin: 20px 0 100px 0;
+    margin: 0 0 100px 0;
     text-align: center;
     font-size: calc(15px + 2vmin);
     user-select: none;
+}
+
+.header-title {
+    opacity: 0;
+    animation: 2s footer-fade 1s forwards;
+    width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @keyframes title-fade {
