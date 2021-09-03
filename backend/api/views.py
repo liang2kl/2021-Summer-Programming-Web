@@ -139,11 +139,15 @@ def search(request: HttpRequest):
     return create_search_response(object, interval)
 
 def get_search_videos(keyword: str):
-    query = list(Video.objects.filter(title__icontains=keyword).values())
+    q1 = Video.objects.filter(title__icontains=keyword).values()
+    q2 = Video.objects.filter(description__icontains=keyword).values()
+    query = list(q1.union(q2))
     return query
 
 def get_search_users(keyword: str):
-    query = list(User.objects.filter(name__icontains=keyword).values())
+    q1 = User.objects.filter(name__icontains=keyword).values()
+    q2 = User.objects.filter(bio__icontains=keyword).values()
+    query = list(q1.union(q2))
     return query
 
 # Create response
