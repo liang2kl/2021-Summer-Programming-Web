@@ -1,10 +1,10 @@
-.fade-slide-animated {
+.c {
     opacity: 0;
-    animation: fade-slide 0.7s ease-in-out forwards;
-}   
-
-.container-row {
-    width: 100%;
+    animation-name: fade-slide;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0;
+    animation-fill-mode: forwards;
 }
 
 @keyframes fade-slide {

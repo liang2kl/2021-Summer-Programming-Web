@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getVideo } from "./API";
+import UserCard from "./UserCard";
 import { Card, Space, Statistic, Row, Col, Comment, Avatar, Divider } from "antd";
 import { PlaySquareTwoTone, BuildTwoTone, LikeTwoTone, DollarCircleTwoTone } from "@ant-design/icons";
 
@@ -30,14 +31,13 @@ function VideoPage() {
       }}>
 
         <Col span={18}>
-          <Space direction="vertical" size={24}>
+          <Space direction="vertical" size={24} style={{ width: "100%" }}>
 
             <iframe
               className="video-player fade-slide-animated"
               border="0"
-              frameborder="no"
-              framespacing="0"
-              allowfullscreen="true"
+              frameBorder="no"
+              allowFullScreen={true}
               src={"https://player.bilibili.com/player.html?bvid=" + id}
               style={{ width: "100%", aspectRatio: "1.7", backgroundColor: "#fff" }}
             />
@@ -53,7 +53,17 @@ function VideoPage() {
           </Space>
 
         </Col>
+        
         <Col span={6} >
+          <UserCard
+            id={video ? video.author_id : null}
+            className="fade-slide-animated"
+            title="UP 主"
+            style={{ animationDelay: "0.05s" }}
+            link
+            showBio
+          />
+          <div style={{ height: 24 }} />
           <Card
             className="fade-slide-animated"
             title="视频信息"
@@ -62,17 +72,21 @@ function VideoPage() {
           >
             {video && <Space direction="vertical" size={18} style={{ width: "100%" }} >
               {StatisticRow("播放量", video.plays,
-                <PlaySquareTwoTone />, 2)}
+                <PlaySquareTwoTone />, 4)}
               {StatisticRow("点赞数", video.stars,
-                <LikeTwoTone />, 3)}
+                <LikeTwoTone />, 5)}
               {StatisticRow("弹幕数", video.shoots,
-                <BuildTwoTone />, 4)}
+                <BuildTwoTone />, 6)}
               {StatisticRow("投币数", video.coins,
-                <DollarCircleTwoTone />, 4)}
-              {video.description.length > 4 && <div style={{ marginTop: "15px" }}>
-                <strong>简介</strong>
-                <div style={{ color: "gray" }}>{video.description}</div>
-              </div>}
+                <DollarCircleTwoTone />, 7)}
+              {video.description.length > 4 &&
+                <div
+                  className="fade-slide-animated"
+                  style={{ marginTop: "15px", animationDelay: "0.6s" }}
+                >
+                  <strong>简介</strong>
+                  <div style={{ color: "gray" }}>{video.description}</div>
+                </div>}
 
             </Space>
             }
@@ -88,7 +102,7 @@ function VideoPage() {
       title={title}
       value={value}
       prefix={prefix}
-      style={{ animationDelay: (0.1 * index).toString() + "s" }}
+      style={{ animationDelay: (0.06 * index).toString() + "s" }}
     />
   }
 
@@ -99,6 +113,7 @@ function VideoPage() {
     shuffleArray(colors)
     return video.comments.map((comment, index) =>
       <Comment
+        key={index}
         className="fade-slide-animated"
         author={names[index % 5]}
         avatar={<Avatar style={{ backgroundColor: colors[index % 5] }} />}

@@ -1,83 +1,75 @@
 import { getVideos } from "./API";
 import { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { Col, Row, Card, Space, Image, Pagination, Layout } from "antd";
+import { Card, Image, Pagination, Layout, Tooltip } from "antd";
 
 import WebContent from "./WebContent";
+import GridContent from "./GridContent";
 import "./VideoListPage.css"
 
 const { Footer } = Layout;
 
 function VideoListPage(props) {
-  const { page } = useParams()
+  const { page: init_page } = useParams()
+  
   const history = useHistory()
   const [videos, setVideos] = useState([])
   const [size, setSize] = useState(40)
+  const [page, setPage] = useState(init_page)
   const cols = 4
-  const rows = parseInt(videos.length / cols) + ((videos.length % cols) != 0 ? 1 : 0)
 
   const totalRecords = props.videos
 
   useEffect(() => {
-    console.log("Init")
-    getVideos(page, size, videos => {
-      console.log("Set")
+    getVideos(init_page, size, videos => {
       setVideos(videos)
+      setPage(page)
       window.scrollTo({ top: 0 })
     })
-  }, [page, size])
+  }, [init_page, size])
 
-  return <WebContent title="所有视频" subTitle={"第 " + page.toString() + " 页"}>
-      {videos.length > 0 && listContent()}
-      {videos.length === 0 && <div style={{minHeight: "1000px"}} />}
+  return <WebContent title="所有视频" subTitle={"第 " + init_page.toString() + " 页"} toRoot={true}>
+    {videos.length > 0 &&
+      <GridContent
+        total={videos.length}
+        cols={cols}
+      content={(index) => <Link to={"/video/" + videos[index].id}>
+        <Card hoverable={true} className="c"
+          style={{ animationDelay: ((index) * 0.03).toString() + "s" }}>
+          <Tooltip title={videos[index].title}>
+            <h3 className="card-header card-text">{videos[index].title}</h3>
+            <div className="card-description card-text">{videos[index].description}</div>
+          </Tooltip>
+          <Image
+            src={videos[index].cover_url + "@412w_232h_1c.jpg"}
+              preview={false}
+              style={{
+                marginTop: "16px",
+                borderRadius: "3px"
+              }}
+            />
+          </Card>
+        </Link>}
+        itemId={(index) => videos[index].id}
+      />}
+    {videos.length === 0 && <div style={{ minHeight: "1000px" }} />}
 
-      <Footer align="center">
-        <Pagination
-          showSizeChanger
-          onChange={(page, size) => {
-            console.log("Setting", page)
-            setSize(size)
-            history.push("/videos/" + page.toString())
-          }}
-          defaultCurrent={page}
-          total={totalRecords}
-          pageSize={size}
-          pageSizeOptions={[20, 40, 60, 100]}
-        />
-      </Footer>
+    <Footer align="center">
+      <Pagination
+        showSizeChanger
+        onChange={(page, size) => {
+          setPage(page)
+          setSize(size)
+          history.push("/videos/" + page.toString())
+        }}
+        defaultCurrent={init_page}
+        total={totalRecords}
+        pageSize={size}
+        pageSizeOptions={[20, 40, 60, 100]}
+      />
+    </Footer>
 
   </WebContent>
-  
-
-  function listContent() {
-    return <div className="video-list-container">
-      <Space direction="vertical" size={16}>
-        {Array(rows).fill(null).map((_, row) =>
-          <Row key={row.toString()} align="middle" gutter={[16, 16]}>
-            {Array(row == rows - 1 ? videos.length % cols : cols)
-              .fill(null).map((_, col) =>
-                <Col key={videos[row * cols + col].id} span={parseInt(24 / cols)}>
-                  <Link to={"/video/" + videos[row * cols + col].id}>
-                    <Card hoverable={true} className="c" style={{ animationDelay: ((row * cols + col) * 0.03).toString() + "s" }}>
-                      <h3 className="card-header card-text">{videos[row * cols + col].title}</h3>
-                      <div className="card-description card-text">{videos[row * cols + col].description}</div>
-                      <Image
-                        src={videos[row * cols + col].cover_url + "@412w_232h_1c.jpg"}
-                        preview={false}
-                        style={{
-                          marginTop: "16px",
-                          borderRadius: "3px"
-                        }}
-                      />
-                    </Card>
-                  </Link>
-                </Col>
-              )}
-          </Row>
-        )}
-      </Space>
-    </div>
-  }
 }
 
 export default VideoListPage

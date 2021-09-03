@@ -35,5 +35,9 @@ function getVideo(id, handler) {
     get("/video", {"id": id}, handler)
 }
 
+function getUser(id, handler) {
+    get("/user", {"id": id}, handler)
+}
+
 export { getVideoCount, getUserCount, 
-    getVideos, getUsers, getVideo }
+    getVideos, getUsers, getVideo, getUser }

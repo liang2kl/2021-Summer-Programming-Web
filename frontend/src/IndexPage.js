@@ -8,8 +8,8 @@ const { Content, Footer } = Layout;
 
 function IndexPage(props) {
 
-  const videoCount = props.videos
-  const userCount = props.users
+  const videoCount = props.videoNum
+  const userCount = props.userNum
 
   return <Layout className = "layout">
     <Content style={{ padding: '0 50px' }} className="content">
@@ -37,15 +37,18 @@ function IndexPage(props) {
           </Link>
         </Col>
         <Col span={12}>
-          <Card className="card user-card" hoverable="true">
-            <Statistic
-              title="总用户数"
-              value={userCount}
-              loading={userCount == null}
-              prefix={<FundFilled />}
-              valueStyle={{ fontFamily: "monaco" }}
-            />
-          </Card>
+          <Link to="/users">
+
+            <Card className="card user-card" hoverable="true">
+              <Statistic
+                title="总用户数"
+                value={userCount}
+                loading={userCount == null}
+                prefix={<FundFilled />}
+                valueStyle={{ fontFamily: "monaco" }}
+              />
+            </Card>
+          </Link>
         </Col>
       </Row>
 

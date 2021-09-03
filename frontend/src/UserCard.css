@@ -1,0 +1,17 @@
+.user-link {
+    color: black;
+}
+
+.user-link:hover {
+    color: #1890ff;
+}
+
+.user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-height: 20px; 
+    max-height: 20px;     
+}
+
