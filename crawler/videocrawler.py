@@ -42,7 +42,7 @@ class VideoCrawler:
                     items = soup.find_all("div", {"class": "l-item"})
                     
                     for item in items:
-                        video_id = item.find("a")["href"][25:]
+                        video_id = item.find("a")["href"][24:]
                         user_id = item.find("a", {"class": "v-author"})["href"][22:]
                         ids.append((video_id, user_id))
                 except TimeoutException:
