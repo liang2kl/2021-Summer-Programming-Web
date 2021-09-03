@@ -17,7 +17,7 @@ def get_list(request: HttpRequest):
     if not list_type:
         return create_error_response(-1, "Missing parameter 'type'")
     elif list_type == "v":
-        videos = query_videos(page, count)
+        videos = query_videos(None, page, count)
         if videos:
             return create_success_response(videos)
         else:
@@ -30,14 +30,33 @@ def get_list(request: HttpRequest):
         else:
             return create_error_response(-1, "Invalid parameter 'page'")
     
+    elif list_type == "uv":
+        author_id = request.GET.get("id", None)
+        if author_id:
+            videos = query_videos(author_id, page, count)
+            if videos:
+                return create_success_response(videos)
+            else:
+                return create_error_response(-1, "Invalid parameter 'page'")
+        else:
+            return create_error_response(-1, "Invalid parameter 'id'")
+
     else:
         return create_error_response(-1, "Invalid parameter 'type'")
 
-def query_videos(page: int, count: int) -> str:
+
+def query_videos(author_id: str, page: int, count: int) -> str:
     offset = (page - 1) * count
-    query = list(Video.objects.values()[offset: offset + count])
+    query = None
+
+    if author_id:
+        query = list(Video.objects.filter(author_id=author_id).values()[offset: offset + count])
+    else:
+        query = list(Video.objects.values()[offset: offset + count])
+
     for video in query:
         video["comments"] = json.loads(video["comments"])
+        print(video["author_id"])
 
     return query
 
@@ -46,7 +65,6 @@ def query_users(page: int, count: int) -> List[User]:
     query = list(User.objects.values()[offset: offset + count])
 
     return query
-
 
 # Video
 def get_video(request: HttpRequest):
