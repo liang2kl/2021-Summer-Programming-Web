@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
+from django.db.models import Q
 from .models import Video, User
 from typing import List
 import json
@@ -139,16 +140,12 @@ def search(request: HttpRequest):
     return create_search_response(object, interval)
 
 def get_search_videos(keyword: str):
-    q1 = Video.objects.filter(title__icontains=keyword).values()
-    q2 = Video.objects.filter(description__icontains=keyword).values()
-    query = list(q1.union(q2))
-    return query
+    query = Video.objects.filter(Q(title__icontains=keyword) | Q(description__icontains=keyword)).values()
+    return list(query)
 
 def get_search_users(keyword: str):
-    q1 = User.objects.filter(name__icontains=keyword).values()
-    q2 = User.objects.filter(bio__icontains=keyword).values()
-    query = list(q1.union(q2))
-    return query
+    query = User.objects.filter(Q(name__icontains=keyword) | Q(bio__icontains=keyword)).values()
+    return list(query)
 
 # Create response
 def create_error_response(code: int, msg: str) -> JsonResponse:
