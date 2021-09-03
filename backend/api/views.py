@@ -15,7 +15,7 @@ def get_list(request: HttpRequest):
     count = min(count, 100)
     
     if not list_type:
-        return create_error_response(-1, "Invalid 'type' parameter")
+        return create_error_response(-1, "Missing parameter 'type'")
     elif list_type == "v":
         videos = query_videos(page, count)
         if videos:
@@ -52,13 +52,30 @@ def query_users(page: int, count: int) -> List[User]:
 def get_video(request: HttpRequest):
     q_id = request.GET.get("id", None)
     if not q_id:
-        return create_error_response(-1, "Invalid parameter 'id'")
+        return create_error_response(-1, "Missing parameter 'id'")
     
     try: 
         video = Video.objects.filter(id=q_id).values().first()
         if video:
             video["comments"] = json.loads(video["comments"])
             return create_success_response(video)
+        else:
+            return create_error_response(-1, f"No record matches id {q_id}")
+
+    except:
+        return create_error_response(-1, "Unexpected error")
+
+# User
+def get_user(request: HttpRequest):
+    q_id = request.GET.get("id", None)
+    if not q_id:
+        return create_error_response(-1, "Missing parameter 'id'")
+
+    try:
+        user = User.objects.filter(id=q_id).values().first()
+        if user:
+            user["videos"] = json.loads(user["videos"])
+            return create_success_response(user)
         else:
             return create_error_response(-1, f"No record matches id {q_id}")
 
