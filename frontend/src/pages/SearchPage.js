@@ -27,13 +27,15 @@ function SearchPage() {
           if (type == "v" && videoKey !== string) {
             setVideoKey(string)
             setKeyChanged(false)
+            setInterval(null)
             searchVideos(string, (data) => {
               setVideos(data.data)
-              setInterval(data.interval)
+              setInterval(data.interval.toString())
             })
           } else if (userKey !== string) {
             setUserKey(string)
             setKeyChanged(false)
+            setInterval(null)
             searchUsers(string, (data) => {
               setUsers(data.data)
               setInterval(data.interval)
@@ -46,7 +48,7 @@ function SearchPage() {
         <Radio.Button value="u">用户</Radio.Button>
       </Radio.Group>
 
-      {/* <h2 className="fade-slide-animated">{type == "v" ? videoKey : userKey}</h2> */}
+      <h2 className="fade-slide-animated">{type == "v" ? videoKey : userKey}</h2>
       {type == "v" && videos.length > 0 &&
         <VideoListContent videos={videos} />
       }

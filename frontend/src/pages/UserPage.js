@@ -17,9 +17,10 @@ function UserPage() {
   useEffect(() => {
     getUser(id, (user) => {
       setUser(user)
-      getUserVideos(id, (videos) => {
-        setVideos(videos)
-      })
+    })
+    getUserVideos(id, (videos) => {
+      setVideos(videos)
+      console.log(videos)
     })
   }, [])
 

@@ -17,7 +17,6 @@ function UserCard(props) {
   useEffect(() => {
     if (id && !user) {
       getUser(id, (user) => {
-        console.log(user)
         setUser(user)
       })
     }
@@ -34,7 +33,7 @@ function UserCard(props) {
 
       <Row gutter={16} align="middle" wrap={false}>
         <Col flex="none" >
-          <Avatar src={user.avatar_url} />
+          <Avatar src={user.avatar_url + "@90w_90h_1c_100q.webp"} />
         </Col>
         <Col className="user-name" flex="auto">
           <Name />

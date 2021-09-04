@@ -10,37 +10,37 @@
 
 包括爬虫程序和 Django 后端。
 
-1. 创建虚拟环境
+首先，创建虚拟环境：
 
-   ```shell
-   python3 -m venv .venv
-   ```
+```shell
+python3 -m venv .venv
+```
 
-2. 激活虚拟环境
+然后，激活虚拟环境：
 
-   ```shell
-   source .venv/bin/activate
-   ```
+```shell
+source .venv/bin/activate
+```
 
-   此时命令行输出类似于：
+此时命令行输出类似于：
 
-   ```
-   (.venv) liang2kl@liang2kl 2020-2021-Programming-Web %
-   ```
+```
+(.venv) liang2kl@liang2kl 2020-2021-Programming-Web %
+```
 
-3. 安装依赖
+最后，安装依赖：
 
-   Python 包（在虚拟环境中）：
+Python 包（在虚拟环境中）：
 
-   ```shell
-   pip3 install -r requirements.txt
-   ```
+```shell
+pip3 install -r requirements.txt
+```
 
-   Firefox driver（需要 Homebrew）：
+Firefox driver（需要 Homebrew）：
 
-   ```shell
-   brew install geckodriver
-   ```
+```shell
+brew install geckodriver
+```
 
 ### React
 
