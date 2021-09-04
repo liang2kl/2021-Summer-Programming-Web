@@ -42,8 +42,8 @@ class VideoCrawler:
                     items = soup.find_all("div", {"class": "l-item"})
                     
                     for item in items:
-                        video_id = item.find("a")["href"][24:]
-                        user_id = item.find("a", {"class": "v-author"})["href"][22:]
+                        video_id = item.find("a")["href"][25:]
+                        user_id = item.find("a", {"class": "v-author"})["href"][21:]
                         ids.append((video_id, user_id))
                 except TimeoutException:
                     pass
@@ -117,7 +117,7 @@ class VideoCrawler:
         return records
 
 # Create config file before crawing
-config_file_path = "crawler/crawler_config.json"
+config_file_path = "crawler_config.json"
 config = json.loads(open(config_file_path, "r").read())
 
 page_stride = config["stride"]

@@ -1,5 +1,4 @@
 import os
-from requests.api import head
 from database import BilibiliDatabase
 from datatypes import User
 from typing import List
@@ -55,9 +54,9 @@ def migrate_user(user: User, video_id: str) -> User:
 
 if __name__ == "__main__":
 
-    ua = UserAgent(path="crawler/fake_useragent.json")
+    ua = UserAgent(path="fake_useragent.json")
 
-    file_url = "crawler/user_crawler_config.txt"
+    file_url = "user_crawler_config.txt"
     current_idx = 0
     if os.path.isfile(file_url):
         file = open(file_url, "r")

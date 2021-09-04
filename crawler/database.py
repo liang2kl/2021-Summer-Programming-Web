@@ -4,7 +4,7 @@ from typing import List
 import json
 
 class BilibiliDatabase:
-    def __init__(self, file="crawler/db.sqlite3"):
+    def __init__(self, file="db.sqlite3"):
         self.connection = sqlite3.connect(file)
         self._create_table()
 
