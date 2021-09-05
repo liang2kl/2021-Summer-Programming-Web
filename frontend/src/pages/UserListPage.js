@@ -1,10 +1,9 @@
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { getUsers } from "../API";
 import { useEffect, useState } from "react";
 import { Pagination, Layout } from "antd";
 
 import WebContent from "../components/WebContent";
-import GridContent from "../components/GridContent";
 import UserListContent from "../components/UserListContent";
 
 const { Footer } = Layout;
@@ -16,7 +15,6 @@ function UserListPage(props) {
   const [users, setUsers] = useState([])
   const [size, setSize] = useState(40)
   const [page, setPage] = useState(init_page)
-  const cols = 4
 
   const totalRecords = props.userNum
 
@@ -26,6 +24,7 @@ function UserListPage(props) {
       setPage(page)
       window.scrollTo({ top: 0 })
     })
+    // eslint-disable-next-line
   }, [init_page, size])
 
 

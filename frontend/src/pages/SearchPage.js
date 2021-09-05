@@ -22,10 +22,10 @@ function SearchPage() {
 
   return <WebContent title="搜索" subTitle={interval ? (interval * 1000).toString() + "ms" : ""}>
     <Space direction="vertical" size={24} style={{ width: "100%", marginLeft: "24px", marginRight: "24px" }}>
-      <Search placeholder={"搜索" + (type == "v" ? "视频" : "用户")} className="fade-slide-animated"
+      <Search placeholder={"搜索" + (type === "v" ? "视频" : "用户")} className="fade-slide-animated"
         size="large" onChange={() => setKeyChanged(true)} onSearch={(string) => {
           if (!string && keyChanged) { return }
-          if (type == "v" && videoKey !== string) {
+          if (type === "v" && videoKey !== string) {
             setVideoKey(string)
             setKeyChanged(false)
             setInterval(null)
@@ -49,14 +49,14 @@ function SearchPage() {
         <Radio.Button value="u">用户</Radio.Button>
       </Radio.Group>
 
-      <h2 className="fade-slide-animated">{type == "v" ? videoKey : userKey}</h2>
-      {type == "v" && videos.length > 0 &&
+      <h2 className="fade-slide-animated">{type === "v" ? videoKey : userKey}</h2>
+      {type === "v" && videos.length > 0 &&
         <PagedContent data={videos} content={(videos) => <VideoListContent videos={videos} />} />
       }
-      {type == "u" && users.length > 0 &&
+      {type === "u" && users.length > 0 &&
         <PagedContent data={users} content={(users) => <UserListContent users={users} />} />
       }
-      {((type == "v" && videos.length == 0) || (type == "u" && users.length == 0)) &&
+      {((type === "v" && videos.length === 0) || (type === "u" && users.length === 0)) &&
         <div className="fade-slide-animated" style={{ height: "800px", animationDelay: "0.1s"}}>输入搜索内容</div>
       }
 

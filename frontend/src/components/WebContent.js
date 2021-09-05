@@ -1,4 +1,4 @@
-import { Layout, PageHeader, Avatar } from "antd";
+import { Layout, PageHeader } from "antd";
 import { useHistory } from "react-router-dom";
 
 import "./WebContent.css"

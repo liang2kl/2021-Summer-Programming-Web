@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getUser, getUserVideos } from "../API";
 import VideoListContent from "../components/VideoListContent";
 import WebContent from "../components/WebContent";
-import { Card, Space, Statistic, Row, Col, Comment, Avatar, Divider } from "antd";
+import { Card, Space, Statistic, Row, Col } from "antd";
 import { FireTwoTone, StarTwoTone } from "@ant-design/icons";
 
 import "./UserPage.css"
@@ -22,7 +22,7 @@ function UserPage() {
       setVideos(videos)
       console.log(videos)
     })
-  }, [])
+  }, [id])
 
   return <WebContent title={user ? user.name : "加载中"} avatar={user ? user.avatar_url + "@90w_90h_1c_100q.webp" : null}>
     <Row gutter={48}>

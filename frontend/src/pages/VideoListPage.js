@@ -16,7 +16,6 @@ function VideoListPage(props) {
   const [videos, setVideos] = useState([])
   const [size, setSize] = useState(40)
   const [page, setPage] = useState(init_page)
-  const cols = 4
 
   const totalRecords = props.videoNum
 
@@ -26,6 +25,7 @@ function VideoListPage(props) {
       setPage(page)
       window.scrollTo({ top: 0 })
     })
+    // eslint-disable-next-line
   }, [init_page, size])
 
   return <WebContent title="所有视频" subTitle={"第 " + init_page.toString() + " 页"} toRoot={true}>

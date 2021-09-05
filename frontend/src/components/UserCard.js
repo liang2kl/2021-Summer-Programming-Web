@@ -11,7 +11,6 @@ function UserCard(props) {
   const id = props.id
   const title = props.title
   const showBio = props.showBio
-  const showStats = props.showStats
   const hoverable = props.hoverable ? props.hoverable : false
 
   useEffect(() => {

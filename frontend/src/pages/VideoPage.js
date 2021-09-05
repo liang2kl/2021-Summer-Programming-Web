@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { getVideo } from "../API";
 import UserCard from "../components/UserCard";
-import { Card, Space, Statistic, Row, Col, Comment, Avatar, Divider } from "antd";
+import { Card, Space, Statistic, Row, Col, Comment, Avatar } from "antd";
 import { PlaySquareTwoTone, BuildTwoTone, LikeTwoTone, DollarCircleTwoTone } from "@ant-design/icons";
 
 import WebContent from "../components/WebContent";
@@ -19,7 +19,7 @@ function VideoPage() {
       setVideo(video)
       window.scrollTo(0, 0)
     })
-  }, [])
+  }, [id])
 
   return <WebContent
     title={video ? video.title : "加载中"}
@@ -33,6 +33,7 @@ function VideoPage() {
         <Space direction="vertical" size={24} style={{ width: "100%" }}>
 
           <iframe
+            title="bilibili"
             className="video-player fade-slide-animated"
             border="0"
             frameBorder="no"

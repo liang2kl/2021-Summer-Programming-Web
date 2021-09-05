@@ -22,7 +22,7 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route path="/" exact render={() => <IndexPage userNum={userCount} videoNum={videoCount}/>} />
         <Route path="/videos/:page" component={() => <VideoListPage videoNum={videoCount}/>} />
