@@ -4,6 +4,17 @@
 
 ![https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGVmYXVsdFwiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ](https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9)
 
+网站可以访问 https://liang2kl.github.io/2020-2021-Programming-Web/ 进行预览，需要下载数据库文件并在本地运行 Django，否则将无法浏览信息：
+
+```shell
+git clone https://github.com/liang2kl/2020-2021-Programming-Web
+cd 2020-2021-Programming-Web/backend
+pip3 install django
+wget https://github.com/liang2kl/2020-2021-Programming-Web/files/7106341/db.sqlite3.zip
+unzip db.sqlite3.zip
+python3 manage.py runserver
+```
+
 ## 环境配置
 
 系统：macOS 11.x。
@@ -134,7 +145,7 @@ npm start
 
 ### 爬虫
 
-因 B 站动态加载，使用 `selenium` 基于 `FireFox` 加载并用 `BeautifulSoup4` 爬取网页。
+因 B 站动态加载，使用 `selenium` 基于 `FireFox` 加载网页，并用 `BeautifulSoup4` 解析。
 
 选择[数码区](https://www.bilibili.com/v/tech/digital/#/)的 `视频热度排序`，固定区间为 `2020-08-01` 至 `2020-08-31`。
 
