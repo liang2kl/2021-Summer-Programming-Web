@@ -54,7 +54,7 @@ function SearchPage() {
         <PagedContent data={videos} content={(videos) => <VideoListContent videos={videos} />} />
       }
       {type == "u" && users.length > 0 &&
-        <UserListContent users={users} />
+        <PagedContent data={users} content={(users) => <UserListContent users={users} />} />
       }
       {((type == "v" && videos.length == 0) || (type == "u" && users.length == 0)) &&
         <div className="fade-slide-animated" style={{ height: "800px", animationDelay: "0.1s"}}>输入搜索内容</div>

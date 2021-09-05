@@ -7,7 +7,7 @@ export function PagedContent(props) {
   const data = props.data
   const content = props.content
 
-  const [size, setSize] = useState(40)
+  const [size, setSize] = useState(20)
   const [page, setPage] = useState(1)
 
   const shownData = data.slice((page - 1) * size, page * size)
