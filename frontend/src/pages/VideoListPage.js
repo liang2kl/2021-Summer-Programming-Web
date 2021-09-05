@@ -35,6 +35,7 @@ function VideoListPage(props) {
     <Footer align="center">
       <Pagination
         showSizeChanger
+        showQuickJumper
         onChange={(page, size) => {
           setPage(page)
           setSize(size)

@@ -3,6 +3,7 @@ import { searchUsers, searchVideos } from '../API'
 import WebContent from "../components/WebContent"
 import VideoListContent from '../components/VideoListContent'
 import UserListContent from '../components/UserListContent'
+import { PagedContent } from '../components/PagedContent'
 import { useState } from 'react'
 
 import "./SearchPage.css"
@@ -50,7 +51,7 @@ function SearchPage() {
 
       <h2 className="fade-slide-animated">{type == "v" ? videoKey : userKey}</h2>
       {type == "v" && videos.length > 0 &&
-        <VideoListContent videos={videos} />
+        <PagedContent data={videos} content={(videos) => <VideoListContent videos={videos} />} />
       }
       {type == "u" && users.length > 0 &&
         <UserListContent users={users} />

@@ -24,7 +24,7 @@ function UserPage() {
     })
   }, [])
 
-  return <WebContent title={user ? user.name : "加载中"} avatar={user ? user.avatar_url : null}>
+  return <WebContent title={user ? user.name : "加载中"} avatar={user ? user.avatar_url + "@90w_90h_1c_100q.webp" : null}>
     <Row gutter={48}>
       <Col span={18}>
         <Space direction="vertical" size={24} style={{ width: "100%" }}>
@@ -43,7 +43,7 @@ function UserPage() {
           {user && <Space direction="vertical" size={18} style={{ width: "100%" }} >
             {StatisticRow("粉丝数", user.fan_num,
               <FireTwoTone />, 4)}
-            {StatisticRow("订阅数", user.subs_num,
+            {StatisticRow("关注数", user.subs_num,
               <StarTwoTone />, 5)}
             {user.bio.length > 4 &&
               <div
