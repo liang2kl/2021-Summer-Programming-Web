@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/2020-2021-Programming-Web/static/css/main.28735458.chunk.css",
+    "main.js": "/2020-2021-Programming-Web/static/js/main.0c8a77d0.chunk.js",
+    "main.js.map": "/2020-2021-Programming-Web/static/js/main.0c8a77d0.chunk.js.map",
+    "runtime-main.js": "/2020-2021-Programming-Web/static/js/runtime-main.6cc7df59.js",
+    "runtime-main.js.map": "/2020-2021-Programming-Web/static/js/runtime-main.6cc7df59.js.map",
+    "static/css/2.786ae0dd.chunk.css": "/2020-2021-Programming-Web/static/css/2.786ae0dd.chunk.css",
+    "static/js/2.c9209635.chunk.js": "/2020-2021-Programming-Web/static/js/2.c9209635.chunk.js",
+    "static/js/2.c9209635.chunk.js.map": "/2020-2021-Programming-Web/static/js/2.c9209635.chunk.js.map",
+    "index.html": "/2020-2021-Programming-Web/index.html",
+    "static/css/2.786ae0dd.chunk.css.map": "/2020-2021-Programming-Web/static/css/2.786ae0dd.chunk.css.map",
+    "static/css/main.28735458.chunk.css.map": "/2020-2021-Programming-Web/static/css/main.28735458.chunk.css.map",
+    "static/js/2.c9209635.chunk.js.LICENSE.txt": "/2020-2021-Programming-Web/static/js/2.c9209635.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6cc7df59.js",
+    "static/css/2.786ae0dd.chunk.css",
+    "static/js/2.c9209635.chunk.js",
+    "static/css/main.28735458.chunk.css",
+    "static/js/main.0c8a77d0.chunk.js"
+  ]
+}
