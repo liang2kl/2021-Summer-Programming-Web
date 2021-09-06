@@ -213,8 +213,8 @@ Django 后端仅提供 API，返回 JSON，不返回 HTML 页面。
     "code": 0,
     "msg": null,
     "data": {
-    	
-	}
+        
+    }
 }
 ```
 
@@ -280,3 +280,37 @@ Django 后端仅提供 API，返回 JSON，不返回 HTML 页面。
 
 使用 [ant-design](https://github.com/ant-design/ant-design) 组件库。
 
+#### 页面路由
+
+在 `App` 中，使用 `react-router-dom` 的 `HashRouter` 进行各个页面的声明式路由，并对特定页面进行重定向：
+
+```jsx
+<HashRouter basename={"/"}>
+  <Switch>
+    <Route path="/" exact render={() => <IndexPage userNum={userCount} videoNum={videoCount}/>} />
+    <Route path="/videos/:page" component={() => <VideoListPage videoNum={videoCount}/>} />
+    <Route path="/users/:page" component={() => <UserListPage userNum={userCount} />} />
+    <Route path="/video/:id" component={() => <VideoPage />} />
+    <Route path="/user/:id" component={() => <UserPage />} />
+    <Route path="/videos" component={() => <Redirect to="/videos/1"/>}/>
+    <Route path="/users" component={() => <Redirect to="/users/1" />} />
+    <Route path="/search" component={() => <SearchPage />} />
+  </Switch>
+</HashRouter>
+```
+
+处理页面跳转时，使用 `react-router-dom` 的 `Link` 或 `useHistory` hook 进行跳转：
+
+```jsx
+<Link to={"/user/" + users[index].id}>
+  {...}
+</Link>
+```
+
+```jsx
+const history = useHistory()
+...
+history.push("/videos/" + page.toString())
+// or: history.replace("/")
+// or: history.goBack()
+```
