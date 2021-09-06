@@ -176,7 +176,7 @@ WebDriverWait(driver, 10, 0.5).until(
 
 ```json
 {
-    "stride": 1,		// 每隔多少页保存一次数据库
+    "stride": 1,	// 每隔多少页保存一次数据库
     "max_pages": 300,	// 一共爬取多少页
     "current_offset": 0	// 当前爬取到第几页
 }
@@ -210,8 +210,8 @@ Django 后端仅提供 API，返回 JSON，不返回 HTML 页面。
 
 ```json
 {
-    "code": 0
-    "msg": null
+    "code": 0,
+    "msg": null,
     "data": {
     	
 	}
