@@ -36,7 +36,7 @@ def analyze(videos: List[VideoRecord]):
     for index, video in enumerate(videos):
         time = datetime.fromisoformat(video.time)
         # The videos should be on the webiste for at least 10 days.
-        if (time - begin_time).days < 10:
+        if (time - begin_time).days > 20:
             continue
         
         play_num = 0
