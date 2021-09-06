@@ -4,7 +4,9 @@
 
 ![https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGVmYXVsdFwiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ](https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9)
 
-网站可以访问 https://liang2kl.github.io/2020-2021-Programming-Web/ 进行预览，需要下载数据库文件并在本地运行 Django，否则将无法浏览信息：
+网站可以访问 https://liang2kl.github.io/2020-2021-Programming-Web/ 进行预览，需要下载数据库文件并在本地运行 Django，否则将无法浏览信息。
+
+在 macOS 下依次运行：
 
 ```shell
 git clone https://github.com/liang2kl/2020-2021-Programming-Web
@@ -15,9 +17,11 @@ unzip db.sqlite3.zip
 python3 manage.py runserver
 ```
 
+即可打开网页进行浏览。
+
 ## 环境配置
 
-系统：macOS 11.x。
+系统：macOS 11.0~12.0。
 
 ### Python
 
@@ -149,5 +153,130 @@ npm start
 
 选择[数码区](https://www.bilibili.com/v/tech/digital/#/)的 `视频热度排序`，固定区间为 `2020-08-01` 至 `2020-08-31`。
 
-#### 爬取视频 id
+#### 爬取视频信息
+
+首先爬取页面排行榜上的视频 BVID，通过 URL 路径递增进行翻页。值得注意的是，视频 div 元素并不会立即加载，需要使用 `selenium` 的 `WebDriverWait` 等待元素加载后再进行解析：
+
+```python
+WebDriverWait(driver, 10, 0.5).until(
+    EC.presence_of_all_elements_located((By.CLASS_NAME, "l-item")))
+```
+
+在爬取了视频的 ID 后，我们根据 ID 依次进入视频的主界面爬取视频的详细信息。页面中用户评论是 lazy load 的，需要出现在屏幕上才会进行加载。我们需要滑动到页面底部，并等待元素加载：
+
+```python
+driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+WebDriverWait(driver, 10, 0.5).until(
+    EC.presence_of_all_elements_located((By.CLASS_NAME, "reply-wrap")))
+```
+
+加载完成后，根据页面结构爬取所需数据。这样我们就完成了一个视频信息的爬取。
+
+另外，为了避免因反爬机制激活或程序中断导致爬取数据丢失，我们每隔一定页面将所得数据储存到数据库中，并在文件中储存当前爬取到第几页。规定一个配置文件格式：
+
+```json
+{
+    "stride": 1,		// 每隔多少页保存一次数据库
+    "max_pages": 300,	// 一共爬取多少页
+    "current_offset": 0	// 当前爬取到第几页
+}
+```
+
+在将数据保存至数据库后，程序更新 `current_offset`，这样就可以在爬虫中断的情况下直接重新运行程序继续爬取。
+
+#### 爬取用户信息
+
+爬取视频信息后，我们需要爬取其对应的用户信息。为了节省时间（使用 `selenium` 爬取一次需要 2 至 3 小时），我们在这里选择直接调用 API 的方式获取。
+
+为尽可能避免反爬机制激活，程序每隔 1 秒爬取一次，并使用 `fake_useragent` 生成随机的 User Agent 头（虽然并没有什么作用）。同样，程序会使用文件记录当前爬取的位置，以便在中断后继续爬取。
+
+#### 数据库
+
+使用 Python 内置的 sqlite3，创建 `video` 和 `user` 两个表，将数据存入。
+
+需要注意的是，sqlite3 并不支持储存数组，我们需要把视频的评论、用户的视频数组序列化存进 sqlite3 中：
+
+```python
+videos = json.dumps(user.videos, ensure_ascii=False)
+```
+
+### Django 后端
+
+Django 后端仅提供 API，返回 JSON，不返回 HTML 页面。
+
+运行前首先将爬虫所得的数据库迁移。迁移完成后即可直接使用。
+
+调用 API 将返回 JSON 格式的响应，格式如下：
+
+```json
+{
+    "code": 0
+    "msg": null
+    "data": {
+    	
+	}
+}
+```
+
+当且仅当 `code` 为 0 时返回有效数据 `data`；发生错误时 `code` 为负，并返回错误原因 `msg`。
+
+后端提供的 API 如下：
+
+#### `/list`
+
+获取视频或用户列表。
+
+| Parameter        | Value                     | Description                                           |
+| ---------------- | ------------------------- | ----------------------------------------------------- |
+| `type` required  | string, `v`,  `u` or `uv` | 类型， `v` 为视频， `u` 为用户，`uv` 为某一用户的视频 |
+| `page` required  | int, >= 1                 | 第几页                                                |
+| `count` required | int, >= 1 && <= 100       | 每页返回多少条记录                                    |
+| `id` optional    | string                    | 用户 id，当且仅当 `type` 为 `uv` 时需要               |
+
+返回：`data` 为视频或用户 object 的数组
+
+#### `/video`
+
+获取视频信息。
+
+| Parameter     | Value  | Description     |
+| ------------- | ------ | --------------- |
+| `id` required | string | 所查询视频的 id |
+
+返回：`data` 为所查询的视频 object
+
+#### `/user`
+
+获取用户信息。
+
+| Parameter     | Value  | Description     |
+| ------------- | ------ | --------------- |
+| `id` required | string | 所查询用户的 id |
+
+返回：`data` 为所查询的用户 object
+
+#### `/stats`
+
+获取统计数据。
+
+| Parameter       | Value               | Description                    |
+| --------------- | ------------------- | ------------------------------ |
+| `type` required | string, `v` or  `u` | 类型， `v` 为视频， `u` 为用户 |
+
+返回：`data` 为视频或用户的总数，int
+
+#### `/search`
+
+搜索视频或用户。
+
+| Parameter       | Value               | Description                    |
+| --------------- | ------------------- | ------------------------------ |
+| `type` required | string, `v` or  `u` | 类型， `v` 为视频， `u` 为用户 |
+| `q` required    | string              | 搜索关键词                     |
+
+返回：`data` 为视频或用户 object 的数组，另外多了一项 `interval` 为查询用时（秒），double。
+
+### React 前端
+
+使用 [ant-design](https://github.com/ant-design/ant-design) 组件库。
 
