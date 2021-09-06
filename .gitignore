@@ -126,6 +126,11 @@ dmypy.json
 .pyre/
 
 .DS_Store
+.vscode
+
+# Crawler config
 crawler/crawler_config.json
 crawler/user_crawler_config.txt
-.vscode
+
+# Analysis result
+analysis/figs

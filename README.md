@@ -1,6 +1,6 @@
 # README
 
-前端使用 React，后端使用 Django。
+前端使用 React，后端使用 Django，数据分析详见 [docs/analysis.md](./docs/analysis.md)。
 
 ![https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGVmYXVsdFwiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ](https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggTFJcblxuYyhDcmF3bGVyKVxuZGJbKERhdGFiYXNlKV1cbmIoQmFja2VuZClcbmYoRnJvbnRlbmQpXG5cbmMgLS0-IGRiXG5kYiAtLT4gYlxuZiAtLXJlcXVlc3QtLT4gYlxuYiAtLXJlc3BvbnNlLS0-IGYiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9)
 
@@ -53,9 +53,10 @@ Python 包（在虚拟环境中）：
 pip3 install -r requirements.txt
 ```
 
-Firefox driver（需要 Homebrew）：
+Firefox 与 geckodriver（需要 Homebrew）：
 
 ```shell
+brew install --cask firefox
 brew install geckodriver
 ```
 
