@@ -11,7 +11,7 @@
 ```shell
 git clone https://github.com/liang2kl/2020-2021-Programming-Web
 cd 2020-2021-Programming-Web/backend
-pip3 install django
+pip3 install django django-cors-headers
 wget https://github.com/liang2kl/2020-2021-Programming-Web/files/7106341/db.sqlite3.zip
 unzip db.sqlite3.zip
 python3 manage.py runserver
